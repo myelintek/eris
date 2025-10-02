@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/rotisserie/eris"
+	"github.com/myelintek/eris"
 )
 
 var dsn string

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/rotisserie/eris"
+	"github.com/myelintek/eris"
 )
 
 var (
@@ -485,7 +485,14 @@ func TestErrorAs(t *testing.T) {
 				return
 			}
 			if got := rtarget.Elem().Interface(); got != tc.output {
-				t.Fatalf("%v: expected eris.As('%v', '%v') target interface value to be %#v, but got %#v", desc, tc.cause, reflect.ValueOf(tc.target).Elem(), tc.output, got)
+				t.Fatalf(
+					"%v: expected eris.As('%v', '%v') target interface value to be %#v, but got %#v",
+					desc,
+					tc.cause,
+					reflect.ValueOf(tc.target).Elem(),
+					tc.output,
+					got,
+				)
 			}
 		})
 	}

@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/myelintek/eris"
+
 	pkgerrors "github.com/pkg/errors"
-	"github.com/rotisserie/eris"
 )
 
 var (

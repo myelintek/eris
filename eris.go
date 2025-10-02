@@ -9,7 +9,7 @@ import (
 
 // New creates a new root error with a static message.
 func New(msg string) error {
-	stack := callers(3) // callers(3) skips this method, stack.callers, and runtime.Callers
+	stack := callers(4) // callers(3) skips this method, stack.callers, and runtime.Callers
 	return &rootError{
 		global: stack.isGlobal(),
 		msg:    msg,
@@ -19,7 +19,7 @@ func New(msg string) error {
 
 // Errorf creates a new root error with a formatted message.
 func Errorf(format string, args ...interface{}) error {
-	stack := callers(3)
+	stack := callers(4)
 	return &rootError{
 		global: stack.isGlobal(),
 		msg:    fmt.Sprintf(format, args...),
@@ -52,10 +52,10 @@ func wrap(err error, msg string) error {
 	}
 
 	// callers(4) skips runtime.Callers, stack.callers, this method, and Wrap(f)
-	stack := callers(4)
+	stack := callers(5)
 	// caller(3) skips stack.caller, this method, and Wrap(f)
 	// caller(skip) has a slightly different meaning which is why it's not 4 as above
-	frame := caller(3)
+	frame := caller(4)
 	switch e := err.(type) {
 	case *rootError:
 		if e.global {

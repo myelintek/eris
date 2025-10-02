@@ -4,7 +4,7 @@
 
 Package `eris` is an error handling library with readable stack traces and flexible formatting support.
 
-`go get github.com/rotisserie/eris`
+`go get github.com/myelintek/eris`
 
 <!-- toc -->
 
@@ -30,7 +30,7 @@ Package `eris` is an error handling library with readable stack traces and flexi
 
 This package was inspired by a simple question: what if you could fix a bug without wasting time replicating the issue or digging through the code? With that in mind, this package is designed to give you more control over error handling via error wrapping, stack tracing, and output formatting.
 
-The [example](https://github.com/rotisserie/eris/blob/master/examples/logging/example.go) that generated the output below simulates a realistic error handling scenario and demonstrates how to wrap and log errors with minimal effort. This specific error occurred because a user tried to access a file that can't be located, and the output shows a clear path from the top of the call stack to the source.
+The [example](https://github.com/myelintek/eris/blob/master/examples/logging/example.go) that generated the output below simulates a realistic error handling scenario and demonstrates how to wrap and log errors with minimal effort. This specific error occurred because a user tried to access a file that can't be located, and the output shows a clear path from the top of the call stack to the source.
 
 ```json
 {
@@ -38,20 +38,20 @@ The [example](https://github.com/rotisserie/eris/blob/master/examples/logging/ex
     "root":{
       "message":"error internal server",
       "stack":[
-        "main.main:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:143",
-        "main.ProcessResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:85",
-        "main.ProcessResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:82",
-        "main.GetRelPath:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:61"
+        "main.main:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:143",
+        "main.ProcessResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:85",
+        "main.ProcessResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:82",
+        "main.GetRelPath:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:61"
       ]
     },
     "wrap":[
       {
         "message":"failed to get relative path for resource 'res2'",
-        "stack":"main.ProcessResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:85"
+        "stack":"main.ProcessResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:85"
       },
       {
         "message":"Rel: can't make ./some/malformed/absolute/path/data.json relative to /Users/roti/",
-        "stack":"main.GetRelPath:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:61"
+        "stack":"main.GetRelPath:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:61"
       }
     ]
   },
@@ -68,7 +68,7 @@ Many of the methods in this package will look familiar if you've used [pkg/error
 
 ### Creating errors
 
-Creating errors is simple via [`eris.New`](https://pkg.go.dev/github.com/rotisserie/eris#New).
+Creating errors is simple via [`eris.New`](https://pkg.go.dev/github.com/myelintek/eris#New).
 
 ```golang
 var (
@@ -87,7 +87,7 @@ func (req *Request) Validate() error {
 
 ### Wrapping errors
 
-[`eris.Wrap`](https://pkg.go.dev/github.com/rotisserie/eris#Wrap) adds context to an error while preserving the original error.
+[`eris.Wrap`](https://pkg.go.dev/github.com/myelintek/eris#Wrap) adds context to an error while preserving the original error.
 
 ```golang
 relPath, err := GetRelPath("/Users/roti/", resource.AbsPath)
@@ -99,7 +99,7 @@ if err != nil {
 
 ### Formatting and logging errors
 
-[`eris.ToString`](https://pkg.go.dev/github.com/rotisserie/eris#ToString) and [`eris.ToJSON`](https://pkg.go.dev/github.com/rotisserie/eris#ToJSON) should be used to log errors with the default format (shown above). The JSON method returns a `map[string]interface{}` type for compatibility with Go's `encoding/json` package and many common JSON loggers (e.g. [logrus](https://github.com/sirupsen/logrus)).
+[`eris.ToString`](https://pkg.go.dev/github.com/myelintek/eris#ToString) and [`eris.ToJSON`](https://pkg.go.dev/github.com/myelintek/eris#ToJSON) should be used to log errors with the default format (shown above). The JSON method returns a `map[string]interface{}` type for compatibility with Go's `encoding/json` package and many common JSON loggers (e.g. [logrus](https://github.com/sirupsen/logrus)).
 
 ```golang
 // format the error to JSON with the default format and stack traces enabled
@@ -123,16 +123,16 @@ Errors created with this package contain stack traces that are managed automatic
   "root":{
     "message":"error bad request", // root cause
     "stack":[
-      "main.main:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:143", // original calling method
-      "main.ProcessResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:71",
-      "main.(*Request).Validate:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:29", // location of Wrap call
-      "main.(*Request).Validate:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:28" // location of the root
+      "main.main:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:143", // original calling method
+      "main.ProcessResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:71",
+      "main.(*Request).Validate:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:29", // location of Wrap call
+      "main.(*Request).Validate:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:28" // location of the root
     ]
   },
   "wrap":[
     {
       "message":"received a request with no ID", // additional context
-      "stack":"main.(*Request).Validate:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:29" // location of Wrap call
+      "stack":"main.(*Request).Validate:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:29" // location of Wrap call
     }
   ]
 }
@@ -156,16 +156,16 @@ fmt.Println(formattedStr)
 
 // example output:
 // error not found
-//   main.GetResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:52
-//   main.ProcessResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:76
-//   main.main:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:143
+//   main.GetResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:52
+//   main.ProcessResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:76
+//   main.main:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:143
 // failed to get resource 'res1'
-//   main.GetResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:52
+//   main.GetResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:52
 ```
 
 ### Inspecting errors
 
-The `eris` package provides a couple ways to inspect and compare error types. [`eris.Is`](https://pkg.go.dev/github.com/rotisserie/eris#Is) returns true if a particular error appears anywhere in the error chain. Currently, it works simply by comparing error messages with each other. If an error contains a particular message (e.g. `"error not found"`) anywhere in its chain, it's defined to be that error type.
+The `eris` package provides a couple ways to inspect and compare error types. [`eris.Is`](https://pkg.go.dev/github.com/myelintek/eris#Is) returns true if a particular error appears anywhere in the error chain. Currently, it works simply by comparing error messages with each other. If an error contains a particular message (e.g. `"error not found"`) anywhere in its chain, it's defined to be that error type.
 
 ```golang
 ErrNotFound := eris.New("error not found")
@@ -177,7 +177,7 @@ if eris.Is(err, ErrNotFound) {
 }
 ```
 
-[`eris.As`](https://pkg.go.dev/github.com/rotisserie/eris#As) finds the first error in a chain that matches a given target. If there's a match, it sets the target to that error value and returns true.
+[`eris.As`](https://pkg.go.dev/github.com/myelintek/eris#As) finds the first error in a chain that matches a given target. If there's a match, it sets the target to that error value and returns true.
 
 ```golang
 var target *NotFoundError
@@ -189,7 +189,7 @@ if errors.As(err, &target) {
 }
 ```
 
-[`eris.Cause`](https://pkg.go.dev/github.com/rotisserie/eris#Cause) unwraps an error until it reaches the cause, which is defined as the first (i.e. root) error in the chain.
+[`eris.Cause`](https://pkg.go.dev/github.com/myelintek/eris#Cause) unwraps an error until it reaches the cause, which is defined as the first (i.e. root) error in the chain.
 
 ```golang
 ErrNotFound := eris.New("error not found")
@@ -203,7 +203,7 @@ if eris.Cause(err) == ErrNotFound {
 
 ### Formatting with custom separators
 
-For users who need more control over the error output, `eris` allows for some control over the separators between each piece of the output via the [`eris.Format`](https://pkg.go.dev/github.com/rotisserie/eris#Format) type. If this isn't flexible enough for your needs, see the [custom output format](#writing-a-custom-output-format) section below. To format errors with custom separators, you can define and pass a format object to [`eris.ToCustomString`](https://pkg.go.dev/github.com/rotisserie/eris#ToCustomString) or [`eris.ToCustomJSON`](https://pkg.go.dev/github.com/rotisserie/eris#ToCustomJSON).
+For users who need more control over the error output, `eris` allows for some control over the separators between each piece of the output via the [`eris.Format`](https://pkg.go.dev/github.com/myelintek/eris#Format) type. If this isn't flexible enough for your needs, see the [custom output format](#writing-a-custom-output-format) section below. To format errors with custom separators, you can define and pass a format object to [`eris.ToCustomString`](https://pkg.go.dev/github.com/myelintek/eris#ToCustomString) or [`eris.ToCustomJSON`](https://pkg.go.dev/github.com/myelintek/eris#ToCustomJSON).
 
 ```golang
 // format the error to a string with custom separators
@@ -229,7 +229,7 @@ fmt.Println(formattedStr)
 
 ### Writing a custom output format
 
-`eris` also allows advanced users to construct custom error strings or objects in case the default error doesn't fit their requirements. The [`UnpackedError`](https://pkg.go.dev/github.com/rotisserie/eris#UnpackedError) object provides a convenient and developer friendly way to store and access existing error traces. The `ErrRoot` and `ErrChain` fields correspond to the root error and wrap error chain, respectively. If a root error wraps an external error, that error will be default formatted and assigned to the `ErrExternal` field. If any other error type is unpacked, it will appear in the `ErrExternal` field. You can access all of the information contained in an error via [`eris.Unpack`](https://pkg.go.dev/github.com/rotisserie/eris#Unpack).
+`eris` also allows advanced users to construct custom error strings or objects in case the default error doesn't fit their requirements. The [`UnpackedError`](https://pkg.go.dev/github.com/myelintek/eris#UnpackedError) object provides a convenient and developer friendly way to store and access existing error traces. The `ErrRoot` and `ErrChain` fields correspond to the root error and wrap error chain, respectively. If a root error wraps an external error, that error will be default formatted and assigned to the `ErrExternal` field. If any other error type is unpacked, it will appear in the `ErrExternal` field. You can access all of the information contained in an error via [`eris.Unpack`](https://pkg.go.dev/github.com/myelintek/eris#Unpack).
 
 ```golang
 // get the unpacked error object
@@ -268,11 +268,11 @@ Readability is a major design requirement for `eris`. In addition to the JSON ou
 
 ```
 failed to get resource 'res1'
-  main.GetResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:52
+  main.GetResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:52
 error not found
-  main.main:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:143
-  main.ProcessResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:76
-  main.GetResource:/Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:52
+  main.main:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:143
+  main.ProcessResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:76
+  main.GetResource:/Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:52
 ```
 
 The `eris` error stack is designed to be easier to interpret than other error handling packages, and it achieves this by omitting extraneous information and avoiding unnecessary repetition. The stack trace above omits calls from Go's `runtime` package and includes just a single frame for wrapped layers which are inserted into the root error stack trace in the correct order. `eris` also correctly handles and updates stack traces for global error values in a transparent way.
@@ -282,7 +282,7 @@ The output of `pkg/errors` for the same error is shown below. In this case, the 
 ```
 error not found
 main.init
-  /Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:18
+  /Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:18
 runtime.doInit
   /usr/local/Cellar/go/1.13.6/libexec/src/runtime/proc.go:5222
 runtime.main
@@ -291,11 +291,11 @@ runtime.goexit
   /usr/local/Cellar/go/1.13.6/libexec/src/runtime/asm_amd64.s:1357
 failed to get resource 'res1'
 main.GetResource
-  /Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:52
+  /Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:52
 main.ProcessResource
-  /Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:76
+  /Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:76
 main.main
-  /Users/roti/go/src/github.com/rotisserie/eris/examples/logging/example.go:143
+  /Users/roti/go/src/github.com/myelintek/eris/examples/logging/example.go:143
 runtime.main
   /usr/local/Cellar/go/1.13.6/libexec/src/runtime/proc.go:203
 runtime.goexit
@@ -317,11 +317,11 @@ If you'd like to contribute to `eris`, we'd love your input! Please submit an is
 Released under the [MIT License].
 
 [MIT License]: LICENSE.txt
-[doc-img]: https://pkg.go.dev/badge/github.com/rotisserie/eris
-[doc]: https://pkg.go.dev/github.com/rotisserie/eris
-[ci-img]: https://github.com/rotisserie/eris/workflows/build/badge.svg
-[ci]: https://github.com/rotisserie/eris/actions
-[report-img]: https://goreportcard.com/badge/github.com/rotisserie/eris
-[report]: https://goreportcard.com/report/github.com/rotisserie/eris
+[doc-img]: https://pkg.go.dev/badge/github.com/myelintek/eris
+[doc]: https://pkg.go.dev/github.com/myelintek/eris
+[ci-img]: https://github.com/myelintek/eris/workflows/build/badge.svg
+[ci]: https://github.com/myelintek/eris/actions
+[report-img]: https://goreportcard.com/badge/github.com/myelintek/eris
+[report]: https://goreportcard.com/report/github.com/myelintek/eris
 [cov-img]: https://codecov.io/gh/rotisserie/eris/branch/master/graph/badge.svg
 [cov]: https://codecov.io/gh/rotisserie/eris

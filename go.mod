@@ -1,3 +1,3 @@
-module github.com/rotisserie/eris
+module github.com/myelintek/eris
 
 go 1.18

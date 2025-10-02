@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/myelintek/eris"
 	pkgerrors "github.com/pkg/errors"
-	"github.com/rotisserie/eris"
 )
 
 var (

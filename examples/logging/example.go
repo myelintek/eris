@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/myelintek/eris"
 	"github.com/pkg/errors"
-	"github.com/rotisserie/eris"
 	"github.com/sirupsen/logrus"
 )
 
